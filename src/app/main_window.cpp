@@ -272,7 +272,10 @@ void MainWindow::compareInnerBox() {
 
     QString error, log_msg;
     if (inner_box.compare(error)) {
-        log_msg = "用户[" + user_->currentUser().name + "] 内盒起始ICCID[" + inner_box_info.start_iccid + "]. 扫描成功";
+        log_msg.sprintf("用户[%s] 内盒起始ICCID[%s] 内盒结束ICCID[%s] 首卡ICCID[%s] 尾卡ICCID[%s], 扫描成功",
+                        user_->currentUser().name.toStdString().c_str(), inner_box_info.start_iccid.toStdString().c_str(),
+                        inner_box_info.end_iccid.toStdString().c_str(), inner_box_info.start_card_iccid.toStdString().c_str(),
+                        inner_box_info.end_card_iccid.toStdString().c_str());
 
         order_->scanned();
         ui_->scanned_num_label->setText(QString::number(order_->currentOrder().scanned_num) + " 盒");
@@ -292,8 +295,10 @@ void MainWindow::compareInnerBox() {
 
         inbox_row_index_++;
     } else {
-        log_msg = "用户[" + user_->currentUser().name + "] 内盒起始ICCID[" + inner_box_info.start_iccid + "]. 扫描失败，失败原因 [" +
-            error + "] ";
+        log_msg.sprintf("用户[%s] 内盒起始ICCID[%s] 内盒结束ICCID[%s] 首卡ICCID[%s] 尾卡ICCID[%s], 扫描失败，失败原因[%s]",
+                        user_->currentUser().name.toStdString().c_str(), inner_box_info.start_iccid.toStdString().c_str(),
+                        inner_box_info.end_iccid.toStdString().c_str(), inner_box_info.start_card_iccid.toStdString().c_str(),
+                        inner_box_info.end_card_iccid.toStdString().c_str(), error.toStdString().c_str());
 
         QMessageBox::warning(this, "提示", "比对失败: " + error);
     }
@@ -393,7 +398,9 @@ void MainWindow::compareOuterBox() {
     QString error, log_msg;
     bool    is_end;
     if (outer_box_->compare(error, is_end)) {
-        log_msg = "用户[" + user_->currentUser().name + "] 外箱起始ICCID[" + outer_box_info.start_iccid + "]. 扫描成功";
+        log_msg.sprintf("用户[%s] 外箱起始ICCID[%s] 外箱结束ICCID[%s] 内盒起始或结束ICCID[%s], 扫描成功",
+                        user_->currentUser().name.toStdString().c_str(), outer_box_info.start_iccid.toStdString().c_str(),
+                        outer_box_info.end_iccid.toStdString().c_str(), outer_box_info.target_iccid.toStdString().c_str());
 
         // 设置表格内容
         ui_->outer_box_table->setRowCount(outbox_row_index_ + 2);
@@ -409,8 +416,10 @@ void MainWindow::compareOuterBox() {
         outbox_row_index_++;
 
     } else {
-        log_msg =
-            "用户[" + user_->currentUser().name + "] 外箱起始ICCID[" + outer_box_info.start_iccid + "]. 扫描失败，失败原因[" + error + "]";
+        log_msg.sprintf("用户[%s] 外箱起始ICCID[%s] 外箱结束ICCID[%s] 内盒起始或结束ICCID[%s], 扫描失败，失败原因[%s]",
+                        user_->currentUser().name.toStdString().c_str(), outer_box_info.start_iccid.toStdString().c_str(),
+                        outer_box_info.end_iccid.toStdString().c_str(), outer_box_info.target_iccid.toStdString().c_str(),
+                        error.toStdString().c_str());
 
         QMessageBox::warning(this, "提示", "比对失败: " + error);
     }
@@ -468,8 +477,10 @@ void MainWindow::addOrderBtnClicked() {
     int     card_end_check_num        = ui_->card_end_spin_box->value();
     int     scanned_num               = 0;
 
-    QString check_format = "内盒：" + QString::number(inner_box_start_check_num) + "-" + ui_->inner_box_end_spin_box->text() + "\n卡片：" +
-        QString::number(card_start_check_num) + "-" + ui_->card_end_spin_box->text();
+    QString check_format;
+    check_format.sprintf("内盒：%d 位 - %d 位\n卡片：%d 位 - %d 位", inner_box_start_check_num, inner_box_end_check_num,
+                         card_start_check_num, card_end_check_num);
+
     QString          create_time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     Order::OrderInfo new_order   = {
         order_name,         card_count,  check_format, inner_box_start_check_num, inner_box_end_check_num, card_start_check_num,
@@ -502,8 +513,9 @@ void MainWindow::updateOrderBtnClicked() {
     int     card_end_check_num        = ui_->card_end_spin_box->value();
     int     scanned_num               = 0;
 
-    QString check_format = "内盒：" + QString::number(inner_box_start_check_num) + "-" + ui_->inner_box_end_spin_box->text() + "\n卡片：" +
-        QString::number(card_start_check_num) + "-" + ui_->card_end_spin_box->text();
+    QString check_format;
+    check_format.sprintf("内盒：%d 位 - %d 位\n卡片：%d 位 - %d 位", inner_box_start_check_num, inner_box_end_check_num,
+                         card_start_check_num, card_end_check_num);
     QString          create_time = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
     Order::OrderInfo new_order   = {
         order_name,         card_count,  check_format, inner_box_start_check_num, inner_box_end_check_num, card_start_check_num,
