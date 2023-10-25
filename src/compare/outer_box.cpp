@@ -44,9 +44,6 @@ bool OuterBox::compare(QString &error, bool &is_end) {
         correct_end_iccid_   = target_iccid_ + outer_box_info_->card_count;
     }
 
-    qDebug() << "correct_start_iccid_:" << correct_start_iccid_;
-    qDebug() << "correct_end_iccid_:" << correct_end_iccid_;
-
     return true;
 }
 
@@ -58,10 +55,6 @@ bool OuterBox::dataConvert(QString &error) {
     start_iccid_  = outer_box_info_->start_iccid.mid(start_check_num, end_check_num - start_check_num).toLongLong();
     end_iccid_    = outer_box_info_->end_iccid.mid(start_check_num, end_check_num - start_check_num).toLongLong();
     target_iccid_ = outer_box_info_->target_iccid.mid(start_check_num, end_check_num - start_check_num).toLongLong();
-
-    qDebug() << "start_iccid_:" << start_iccid_;
-    qDebug() << "end_iccid_:" << end_iccid_;
-    qDebug() << "target_iccid_:" << target_iccid_;
 
     return true;
 }
