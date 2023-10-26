@@ -16,7 +16,6 @@ bool OuterBox::compare(QString &error, bool &is_end) {
     int start_check_num = outer_box_info_->start_check_num - 1;
     int end_check_num   = outer_box_info_->end_check_num;
 
-    // 数据转换
     QString start_iccid  = outer_box_info_->start_iccid.mid(start_check_num, end_check_num - start_check_num);
     QString end_iccid    = outer_box_info_->end_iccid.mid(start_check_num, end_check_num - start_check_num);
     QString target_iccid = outer_box_info_->target_iccid.mid(start_check_num, end_check_num - start_check_num);
