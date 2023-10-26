@@ -14,6 +14,7 @@ class HighPrecision {
     /// @param b 被加数
     /// @return  QString 和
     QString add(QString a, QString b);
+    QString add(QString a, int b);
 
     /// @brief 减法
     /// @param a 减数

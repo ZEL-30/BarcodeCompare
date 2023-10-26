@@ -25,10 +25,18 @@ QString add(QString a, QString b) {
     return result;
 }
 
+
+QString add(QString a, int b) {
+    return add(a, QString::number(b));
+}
+
 int main() {
     QString a = "1234567890123456789000000000000000000";
     QString b = "12345678901234567890000000000000000000";
-    QString c = add(a, b);
-    printf("%s\n", c.toStdString().c_str());
+    int    c = 10000;
+    QString d = add(a, b);
+    QString e = add(a, c);
+    printf("%s\n", d.toStdString().c_str());
+    printf("%s\n", e.toStdString().c_str());
     return 0;
 }

@@ -29,6 +29,8 @@ QString HighPrecision::add(QString a, QString b) {
     return result;
 }
 
+QString HighPrecision::add(QString a, int b) { return add(a, QString::number(b)); }
+
 QString HighPrecision::sub(QString a, QString b) {
     int     len_a = a.length();
     int     len_b = b.length();

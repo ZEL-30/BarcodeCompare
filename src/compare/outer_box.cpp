@@ -40,15 +40,15 @@ bool OuterBox::compare(QString &error, bool &is_end) {
     }
 
     // 计算正确的起始 ICCID 和结束 ICCID
-    HighPrecision hp;
-    int           interval = hp.sub(target_iccid, start_iccid).toInt();
+    HighPrecision high_precision; // 高精度计算
+    int           interval = high_precision.sub(target_iccid, start_iccid).toInt();
     if (interval % outer_box_info_->card_count == 0) {
-        correct_start_iccid_ = hp.add(target_iccid, QString::number(outer_box_info_->card_count));
+        correct_start_iccid_ = high_precision.add(target_iccid, outer_box_info_->card_count);
         int temp             = outer_box_info_->card_count * 2 - 1;
-        correct_end_iccid_   = hp.add(target_iccid, QString::number(temp));
+        correct_end_iccid_   = high_precision.add(target_iccid, temp);
     } else {
-        correct_start_iccid_ = hp.add(target_iccid, "1");
-        correct_end_iccid_   = hp.add(target_iccid, QString::number(outer_box_info_->card_count));
+        correct_start_iccid_ = high_precision.add(target_iccid, 1);
+        correct_end_iccid_   = high_precision.add(target_iccid, outer_box_info_->card_count);
     }
 
     return true;
