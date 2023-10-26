@@ -25,15 +25,7 @@ class OuterBox {
     bool compare(QString &error, bool &is_end);
 
   private:
-    /// @brief 数据转换
-    /// @param error 传出参数，错误信息
-    bool dataConvert(QString &error);
-
-  private:
     OuterBoxInfo *outer_box_info_;
-    qlonglong     start_iccid_;
-    qlonglong     end_iccid_;
-    qlonglong     correct_start_iccid_; // 正确起始 ICCID
-    qlonglong     correct_end_iccid_;   // 正确结束 ICCID
-    qlonglong     target_iccid_;
+    QString       correct_start_iccid_; // 正确起始 ICCID
+    QString       correct_end_iccid_;   // 正确结束 ICCID
 };

@@ -24,3 +24,10 @@ PUBLIC
     Qt5::Core
     Qt5::Gui
 )
+
+add_executable(test-add test_add.cpp)
+target_link_libraries(test-add
+PUBLIC
+    Qt5::Core
+    Qt5::Gui
+)

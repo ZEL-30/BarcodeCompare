@@ -1,10 +1,11 @@
 #include "outer_box.h"
+#include "high_precision.h"
 
 #include <QDebug>
 
 OuterBox::OuterBox()
-    : correct_start_iccid_(0)
-    , correct_end_iccid_(0) {}
+    : correct_start_iccid_("0")
+    , correct_end_iccid_("0") {}
 
 OuterBox::~OuterBox() {}
 
@@ -12,21 +13,24 @@ bool OuterBox::compare(QString &error, bool &is_end) {
 
     is_end = false;
 
+    int start_check_num = outer_box_info_->start_check_num - 1;
+    int end_check_num   = outer_box_info_->end_check_num;
+
     // 数据转换
-    if (!dataConvert(error)) {
-        return false;
-    }
+    QString start_iccid  = outer_box_info_->start_iccid.mid(start_check_num, end_check_num - start_check_num);
+    QString end_iccid    = outer_box_info_->end_iccid.mid(start_check_num, end_check_num - start_check_num);
+    QString target_iccid = outer_box_info_->target_iccid.mid(start_check_num, end_check_num - start_check_num);
 
     // 判断目标 ICCID 是否在范围内
-    if (target_iccid_ < start_iccid_ || target_iccid_ > end_iccid_) {
+    if (target_iccid < start_iccid || target_iccid > end_iccid) {
         error = QString("内盒不属于该外箱");
         return false;
     }
 
     // 判断目标 ICCID 是否正确
-    if (correct_start_iccid_ != 0 && correct_end_iccid_ != 0) {
-        if (target_iccid_ == correct_start_iccid_ || target_iccid_ == correct_end_iccid_) {
-            if (end_iccid_ == correct_end_iccid_) {
+    if (correct_start_iccid_ != "0" && correct_end_iccid_ != "0") {
+        if (target_iccid == correct_start_iccid_ || target_iccid == correct_end_iccid_) {
+            if (end_iccid == correct_end_iccid_) {
                 is_end = true;
             }
         } else {
@@ -36,25 +40,16 @@ bool OuterBox::compare(QString &error, bool &is_end) {
     }
 
     // 计算正确的起始 ICCID 和结束 ICCID
-    if ((target_iccid_ - start_iccid_) % outer_box_info_->card_count == 0) {
-        correct_start_iccid_ = target_iccid_ + outer_box_info_->card_count;
-        correct_end_iccid_   = target_iccid_ + outer_box_info_->card_count * 2 - 1;
+    HighPrecision hp;
+    int           interval = hp.sub(target_iccid, start_iccid).toInt();
+    if (interval % outer_box_info_->card_count == 0) {
+        correct_start_iccid_ = hp.add(target_iccid, QString::number(outer_box_info_->card_count));
+        int temp             = outer_box_info_->card_count * 2 - 1;
+        correct_end_iccid_   = hp.add(target_iccid, QString::number(temp));
     } else {
-        correct_start_iccid_ = target_iccid_ + 1;
-        correct_end_iccid_   = target_iccid_ + outer_box_info_->card_count;
+        correct_start_iccid_ = hp.add(target_iccid, "1");
+        correct_end_iccid_   = hp.add(target_iccid, QString::number(outer_box_info_->card_count));
     }
-
-    return true;
-}
-
-bool OuterBox::dataConvert(QString &error) {
-    int start_check_num = outer_box_info_->start_check_num - 1;
-    int end_check_num   = outer_box_info_->end_check_num;
-
-    // 数据转换
-    start_iccid_  = outer_box_info_->start_iccid.mid(start_check_num, end_check_num - start_check_num).toLongLong();
-    end_iccid_    = outer_box_info_->end_iccid.mid(start_check_num, end_check_num - start_check_num).toLongLong();
-    target_iccid_ = outer_box_info_->target_iccid.mid(start_check_num, end_check_num - start_check_num).toLongLong();
 
     return true;
 }

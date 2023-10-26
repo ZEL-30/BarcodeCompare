@@ -25,17 +25,6 @@ class InnerBox {
     /// @param error 传出参数，错误信息
     bool compare(QString &error);
 
-    void show();
-
-  private:
-    /// @brief 数据转换
-    /// @param error 传出参数，错误信息
-    bool dataConvert(QString &error);
-
   private:
     InnerBoxInfo *inner_box_info_;
-    qlonglong     start_iccid_;
-    qlonglong     end_iccid_;
-    qlonglong     start_card_iccid_;
-    qlonglong     end_card_iccid_;
 };
